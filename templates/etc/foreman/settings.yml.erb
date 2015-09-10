@@ -1,0 +1,30 @@
+---
+# This file is managed by Puppet. All manual changes will be overwritten.
+
+# You must restart the Rack server after changing either of these values
+# because they are cached at startup.
+:puppet_server: '<%= @server %>'
+:unattended: <%= @unattended %>
+:puppetconfdir: '<%= Puppet[:confdir] %>/puppet.conf'
+:login: <%= @login %>
+:require_ssl: <%= @require_ssl %>
+:locations_enabled: <%= @locations_enabled %>
+:organizations_enabled: <%= @organizations_enabled %>
+:log_level: '<%= @log_level %>'
+
+:ssl_ca_file: '<%= @ssl_dir %>/certs/ca.pem'
+:ssl_certificate: '<%= @ssl_dir %>/certs/<%= @fqdn %>.pem'
+:ssl_priv_key: '<%= @ssl_dir %>/private_keys/<%= @fqdn %>.pem'
+
+<% if @oauth_active -%>
+# The following values are used for providing default settings during db migrate
+:oauth_active: <%= @oauth_active %>
+:oauth_map_users: <%= @oauth_map_users %>
+:oauth_consumer_key: '<%= @oauth_consumer_key %>'
+:oauth_consumer_secret: '<%= @oauth_consumer_secret %>'
+<% end -%>
+
+# Websockets
+:websockets_encrypt: <%= @websockets_encrypt %>
+:websockets_ssl_key: '/etc/foreman/pki/private/<%= @fqdn %>.pem'
+:websockets_ssl_cert: '/etc/foreman/pki/public/<%= @fqdn %>.pub'

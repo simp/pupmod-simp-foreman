@@ -1,0 +1,16 @@
+---
+<% if @use_ssl -%>
+:url: "https://<%= @fqdn %>"
+<% else -%>
+:url: "http://<%= @fqdn %>"
+<% end -%>
+:ssl_ca: "<%= Puppet[:vardir] %>/simp/pki/cacerts/cacerts.pem"
+:ssl_cert: "<%= Puppet[:vardir]%>/simp/pki/public/<%= @fqdn %>.pub"
+:ssl_key: "<%= Puppet[:vardir] %>/simp/pki/private/<%= @fqdn %>.pem"
+
+# Advanced settings
+:puppetdir: "<%= @puppet_vardir %>"
+:puppetuser: "puppet"
+:facts: true
+:timeout: 10
+:threads: null

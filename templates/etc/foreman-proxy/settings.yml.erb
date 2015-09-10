@@ -1,0 +1,52 @@
+### File managed with puppet ###
+## Module: 'foreman_proxy'
+
+:settings_directory: <%= @settings_directory %>
+
+# SSL Setup
+
+# If enabled, all communication would be verfied via SSL.
+# NOTE that both certificates need to be signed by the same CA in order for this to work.
+# See http://theforeman.org/projects/smart-proxy/wiki/SSL for more information.
+
+:ssl_ca_file: '<%= @ssl_dir %>/certs/ca.pem'
+:ssl_certificate: '<%= @ssl_dir %>/certs/<%= @fqdn %>.pem'
+:ssl_private_key: '<%= @ssl_dir %>/private_keys/<%= @fqdn %>.pem'
+
+<%
+  t_trusted_hosts = Array.new
+  if !@trusted_hosts.empty? and !@trusted_hosts.nil?
+    @trusted_hosts.each do |host|
+      t_trusted_hosts << "  - #{host}"
+    end
+  end
+-%>
+# The array of hosts which the proxy accepts connections from.
+<% if !t_trusted_hosts.empty? -%>
+:trusted_hosts:
+<%= t_trusted_hosts.join("\n") %>
+<% end -%>
+
+# By default smart_proxy runs in the foreground. To enable running as a daemon, set to true.
+:daemon: <%= @daemonize %>
+
+# Uncomment and modify if you want to change the default pid file '/var/run/foreman-proxy/foreman-proxy.pid'
+#:daemon_pid: /var/run/foreman-proxy/foreman-proxy.pid
+
+# HTTP ports configuration
+# http is disabled by default. To enable, uncomment 'http_port' setting
+# https is enabled if certificate, CA certificate, and private key are present in locations specifed by
+# ssl_certificate, ssl_ca_file, and ssl_private_key correspondingly
+# default values for https_port is 8443
+#:http_port: 8000
+:https_port: <%= @https_port %>
+
+# shared options for virsh DNS/DHCP provider
+:virsh_network: <%= @virsh_network %>
+
+# Where our proxy log files are stored
+# filename or STDOUT
+:log_file: <%= @log_file %>
+# valid options are
+# WARN, DEBUG, ERROR, FATAL, INFO, UNKNOWN
+:log_level: <%= @log_level %>

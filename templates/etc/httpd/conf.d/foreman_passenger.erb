@@ -1,0 +1,82 @@
+<%
+# Set these according to the Passenger Guide, allow for overrides.
+
+if not @max_pool_size.empty? then
+    p_max_pool_size = @max_pool_size
+else
+    l_msize = @memorysize_mb.to_i - 256
+    p_mem_limit = l_msize / 256
+    p_proc_limit = @processorcount.to_i * 2
+    p_max_pool_size = [ p_mem_limit.to_i, p_proc_limit.to_i ].min
+    p_max_pool_size < 1 and p_max_pool_size = 1
+
+    # Keep a minimum of max_pool_size around
+
+    if @min_instances.empty? then
+      p_min_instances = (p_max_pool_size/2.0).ceil
+    else
+      p_min_instances = @min_instances
+    end
+end
+-%>
+<IFModule !passenger_module>
+  LoadModule passenger_module <%= @passenger_module %>
+</IFModule>
+
+PassengerHighPerformance <%= @high_performance %>
+PassengerMaxPoolSize <%= p_max_pool_size %>
+PassengerMinInstances <%= p_min_instances %>
+PassengerPoolIdleTime <%= @pool_idle_time %>
+PassengerStatThrottleRate <%= @stat_throttle_rate %>
+PassengerFriendlyErrorPages <%= @friendly_error_pages %>
+PassengerTempDir <%= @temp_dir %>
+PassengerBufferResponse <%= @buffer_response %>
+<% if !@user_switching or @user_switching == 'off' then -%>
+PassengerUserSwitching off
+<% end -%>
+
+PassengerRoot <%= @passenger_root %>
+<% if @pre_start then -%>
+PassengerPreStart https://<%= @fqdn %>:<%= @master_port %>/
+<% end -%>
+
+PassengerDefaultRuby <%= @passenger_ruby %>
+
+Listen <%= @master_port %>
+<VirtualHost *:<%= @master_port %>>
+
+SSLEngine on
+SSLProtocol <%= @ssl_protocols.join(' ') %>
+SSLCipherSuite <%= @ssl_cipher_suite.join(':') %>
+
+SSLCertificateKeyFile /etc/httpd/conf/pki/private/<%= @fqdn %>.pem
+SSLCertificateFile /etc/httpd/conf/pki/public/<%= @fqdn %>.pub
+
+SSLCertificateChainFile /etc/httpd/conf/pki/cacerts/cacerts.pem
+SSLCACertificateFile /etc/httpd/conf/pki/cacerts/cacerts.pem
+
+SSLVerifyClient optional
+SSLVerifyDepth  10
+
+SSLOptions +StdEnvVars +ExportCertData
+
+RequestHeader set X-SSL-Subject %{SSL_CLIENT_S_DN}e
+RequestHeader set X-Client-DN %{SSL_CLIENT_S_DN}e
+RequestHeader set X-Client-Verify %{SSL_CLIENT_VERIFY}e
+
+PassengerEnabled on
+
+DocumentRoot <%= @httpd_base %>/public/
+<Directory <%= @httpd_base %>>
+    Options None
+    AllowOverride None
+    <IfVersion < 2.4>
+      Order allow,deny
+      allow from All
+    </IfVersion>
+    <IfVersion >= 2.4>
+      Require all granted
+    </IfVersion>
+</Directory>
+</VirtualHost>
+

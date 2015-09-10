@@ -1,0 +1,97 @@
+# ************************************
+# Vhost template in module apache
+# Managed by Puppet
+# ************************************
+
+<VirtualHost *:443>
+  ServerName <%= @server %>
+
+  ## Vhost docroot
+  DocumentRoot "<%= @vhost_root %>"
+
+  <Directory "<%= @vhost_root %>">
+    Options SymLinksIfOwnerMatch
+    AllowOverride None
+    Require all granted
+  </Directory>
+
+  ## Logging
+  ErrorLog "<%= @error_log %>"
+  ServerSignature Off
+  CustomLog "<%= @access_log %>" combined
+
+  ## Server aliases
+  ServerAlias foreman
+
+  ## SSL directives
+  SSLEngine on
+  SSLCertificateFile      "<%= @sslcertificatefile %>"
+  SSLCertificateKeyFile   "<%= @sslcertificatekeyfile %>"
+  SSLCertificateChainFile "<%= @sslcertificatechainfile %>"
+  SSLCACertificatePath    "<%= @sslcacertificatepath %>"
+  SSLCACertificateFile    "<%= @sslcacertificatefile %>"
+  SSLVerifyClient         <%= @sslverifyclient %>
+  SSLVerifyDepth          <%= @sslverifydepth %>
+  SSLOptions +StdEnvVars
+
+  ## Custom fragment
+PassengerAppRoot <%= @passenger_app_root %>
+PassengerRuby <%= @passenger_ruby %>
+PassengerMinInstances 1
+PassengerStartTimeout 600
+
+AddDefaultCharset UTF-8
+# Static public dir serving
+<Directory /usr/share/foreman/public>
+
+  <IfVersion < 2.4>
+    Allow from all
+  </IfVersion>
+  <IfVersion >= 2.4>
+    Require all granted
+  </IfVersion>
+
+</Directory>
+
+<Directory /usr/share/foreman/public/assets>
+
+  # Use standard http expire header for assets instead of ETag
+  <IfModule mod_expires.c>
+    Header unset ETag
+    FileETag None
+    ExpiresActive On
+    ExpiresDefault "access plus 1 year"
+  </IfModule>
+
+  # Return compressed assets if they are precompiled
+  <IfModule mod_rewrite.c>
+    RewriteEngine on
+    # Make sure the browser supports gzip encoding and file with .gz added
+    # does exist on disc before we rewrite with the extension
+    RewriteCond %{HTTP:Accept-Encoding} \b(x-)?gzip\b
+    RewriteCond %{REQUEST_FILENAME}.gz -s
+    RewriteRule ^(.+) $1.gz [L]
+    # Set headers for all possible assets which are compressed
+    <FilesMatch \.css\.gz$>
+      ForceType text/css
+      Header set Content-Encoding gzip
+      SetEnv no-gzip
+    </FilesMatch>
+    <FilesMatch \.js\.gz$>
+      ForceType text/javascript
+      Header set Content-Encoding gzip
+      SetEnv no-gzip
+    </FilesMatch>
+  </IfModule>
+
+</Directory>
+
+<IfVersion < 2.4>
+  Include /etc/httpd/conf.d/05-foreman-ssl.d/*.conf
+</IfVersion>
+<IfVersion >= 2.4>
+  IncludeOptional /etc/httpd/conf.d/05-foreman-ssl.d/*.conf
+</IfVersion>
+PassengerPreStart https://<%= @server %>
+
+</VirtualHost>

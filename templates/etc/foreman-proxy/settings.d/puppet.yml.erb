@@ -1,0 +1,60 @@
+# This file is managed by puppet. All manual changes will be overwritten.
+---
+# Puppet management
+:enabled: <%= @enabled %>
+:puppet_conf: <%= @puppet_conf %>
+# Valid providers:
+#   puppetrun   (for puppetrun/kick, deprecated in Puppet 3)
+#   mcollective (uses mco puppet)
+#   puppetssh   (run puppet over ssh)
+#   salt        (uses salt puppet.run)
+#   customrun   (calls a custom command with args)
+# Example:
+#:puppet_provider: puppetrun
+<% if !@puppet_provider.empty? -%>
+:puppet_provider: <%= @puppet_provider %>
+<% end -%>
+
+# customrun command details
+# Set :customrun_cmd to the full path of the script you want to run, instead of /bin/false
+:customrun_cmd: <%= @customrun_cmd %>
+# Set :customrun_args to any args you want to pass to your custom script. The hostname of the
+# system to run against will be appended after the custom commands.
+:customrun_args: <%= @customrun_args %>
+
+# Whether to use sudo before the ssh command.
+:puppetssh_sudo: <%= @puppetssh_sudo %>
+# The command which will be sent to the host.
+:puppetssh_command: <%= @puppetssh_command %>
+# wait for the command to finish (and capture exit code), or detach process and return 0
+# Note: enabling this option causes the Foreman web UI to be blocked when executing puppetrun,
+# with timeout from the Browser and/or Foreman's REST client after 60 seconds.
+:puppetssh_wait: <%= @puppetssh_wait %>
+
+# With which user should the proxy connect. Example:
+#:puppetssh_user: root
+#:puppetssh_keyfile: /etc/foreman-proxy/id_rsa
+<% if !@puppetssh_user.empty? -%>
+:puppetssh_user: <%= @puppetssh_user %>
+<% end -%>
+<% if !@puppetssh_keyfile.empty? -%>
+:puppetssh_keyfile: <%= @puppetssh_keyfile %>
+<% end -%>
+
+# Which user to invoke sudo as to run puppet commands. Example:
+#:puppet_user: root
+<% if !@puppet_user.empty? -%>
+:puppet_user: <%= @puppet_user %>
+<% end %>
+
+# URL of the puppet master itself for API requests
+:puppet_url: <%= @puppet_url %>
+
+# SSL certificates used to access the puppet master API
+:puppet_ssl_ca: <%= "/etc/foreman-proxy/ssl/certs/ca.pem" %>
+:puppet_ssl_cert: <%= "/etc/foreman-proxy/ssl/certs/#{@fqdn}.pem" %>
+:puppet_ssl_key: <%= "/etc/foreman-proxy/ssl/private_keys/#{@fqdn}.pem" %>
+
+# Override use of Puppet's API to list environments, by default it will use only if
+# environmentpath is given in puppet.conf, else will look for environments in puppet.conf.
+:puppet_use_environment_api: <%= @puppet_use_environment_api %>
