@@ -40,7 +40,7 @@ define foreman::add_auth_source(
   $attr_login        = 'uid',
   $attr_firstname    = 'givenName',
   $attr_lastname     = 'sn',
-  $attr_mail         = 'email'
+  $attr_mail         = 'email',
   $onthefly_register = false,
   $tls               = true,
   $ldap_filter       = '',
