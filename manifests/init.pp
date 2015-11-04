@@ -96,6 +96,14 @@ class foreman (
   $vhost_root         = '/usr/share/foreman/public'
 ) inherits foreman::params {
 
+  validate_absolute_path($access_log)
+  validate_absolute_path($error_log)
+  validate_absolute_path($passenger_app_root)
+  validate_absolute_path($passenger_ruby)
+  validate_absolute_path($vhost_root)
+  validate_bool($use_ssl)
+  validate_net_list($server)
+
   package { 'foreman':                     ensure => 'latest' }
   package { 'foreman-release':             ensure => 'latest' }
   package { 'foreman-cli':                 ensure => 'latest' }
@@ -274,12 +282,4 @@ class foreman (
   Foreman::User <| title == 'admin' |> -> Foreman::User <| title != 'admin' |>
   Foreman::User <| title == 'admin' |> -> Foreman::Smart_proxy <| |>
   Foreman::User <| title == 'admin' |> -> Foreman::Auth_source <| |>
-
-  validate_absolute_path($access_log)
-  validate_absolute_path($error_log)
-  validate_absolute_path($passenger_app_root)
-  validate_absolute_path($passenger_ruby)
-  validate_absolute_path($vhost_root)
-  validate_bool($use_ssl)
-  validate_net_list($server)
 }
