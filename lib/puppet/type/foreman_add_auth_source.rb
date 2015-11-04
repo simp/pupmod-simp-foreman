@@ -95,6 +95,7 @@ Puppet::Type.newtype(:foreman_add_auth_source) do
 
     def retrieve
       provider.get_account_password
+    end
   end
 
   newproperty(:base_dn) do
