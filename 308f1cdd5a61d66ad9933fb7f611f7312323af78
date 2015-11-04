@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_53303ce8",
+        "filename": "lib/puppet/provider/foreman_smart_proxy/smart_proxy.rb",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b358b833",
+        "filename": "manifests/init.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Move validations above code",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 28
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_f341503a",
+        "filename": "manifests/passenger.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Move validations above code.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 37
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_133de4bb",
+        "filename": "manifests/proxy.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Move validations above code.",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 225,
+        "endChar": 35
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_53475c4b",
+        "filename": "manifests/proxy/facts.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Move validations above code.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_73754097",
+        "filename": "manifests/proxy/puppet.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Move validations above code.",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 32
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b3a6f80e",
+        "filename": "manifests/proxy/puppetca.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Move validations above code.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 25
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_d3728cac",
+        "filename": "manifests/smart_proxy.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Validate these.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 9
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_d3a9ace0",
+        "filename": "manifests/ssl.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Move validations above code.",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 35
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_f3af90e1",
+        "filename": "manifests/user.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Validate these.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 22
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_33bae823",
+        "filename": "metadata.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:57:50Z",
+      "side": 1,
+      "message": "Update URLs to correct locations",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 80
+      },
+      "revId": "308f1cdd5a61d66ad9933fb7f611f7312323af78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
