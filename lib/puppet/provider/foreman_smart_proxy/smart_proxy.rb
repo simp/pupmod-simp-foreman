@@ -5,7 +5,7 @@ Puppet::Type.type(:foreman_smart_proxy).provide(:smart_proxy) do
   require 'rubygems'
   require 'json'
   require 'socket'
-  
+
   def create
     create_smart_proxy
   end

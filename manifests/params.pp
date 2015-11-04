@@ -33,6 +33,13 @@
 # Kendall Moore <kmoore@keywcorp.com>
 #
 class foreman::params {
+  case $::osfamily {
+    'RedHat': {
+    }
+    default: {
+      fail("${::operatingsystem} not supported")
+    }
+  }
   $admin_user      = 'admin'
   $admin_password  = passgen('foreman_admin')
   $log_level       = 'WARN'
