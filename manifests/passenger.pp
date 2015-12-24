@@ -54,9 +54,8 @@ class foreman::passenger (
   $max_pool_size = '',
   $min_instances = '',
   $passenger_log_level = '0',
-#  $passenger_module = '/usr/lib64/httpd/modules/mod_passenger.so',
-  $passenger_root = '/opt/rh/ruby193/root/usr/share/gems/gems/passenger-4.0.18/lib/phusion_passenger/locations.ini',
-  $passenger_module =  '/opt/rh/httpd24/root/usr/lib64/httpd/modules/mod_passenger.so',
+  $passenger_module = '/opt/theforeman/tfm/root/usr/lib64/httpd/modules/mod_passenger.so',
+  $passenger_root = '/opt/theforeman/tfm/root/usr/share/gems/gems/passenger-4.0.18/lib/phusion_passenger/locations.ini',
   $passenger_ruby = $::foreman::passenger_ruby,
   $pool_idle_time = '100',
   $pre_start = true,
@@ -64,27 +63,24 @@ class foreman::passenger (
   $rails_auto_detect = 'on',
   $ssl_protocols = ['TLSv1','TLSv1.1','TLSv1.2'],
   $ssl_cipher_suite = hiera('openssl::cipher_suite',['HIGH']),
+  $ssl_ca_dir = '/etc/foreman/pki/cacerts',
   $stat_throttle_rate = '120',
   $temp_dir = '/var/run/passenger',
   $use_global_queue = 'on',
   $user_switching = 'on'
 ){
-  include '::foreman'
-  include '::apache::ssl'
+  assert_private()
 
-  package { [
-    'ruby193-rubygem-passenger40',
-    'ruby193-mod_passenger40'
-    ]:
-    ensure => 'latest',
-    notify => Apache::Add_site['foreman_passenger']
-  }
+  include '::apache::ssl'
+  contain '::foreman::passenger::install'
+
+  Class['::foreman::passenger::install'] ~> Apache::Add_site['foreman_passenger']
 
   file { $temp_dir :
     ensure => 'directory',
-    owner => 'root',
-    group => 'root',
-    mode => '755',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
     before => Apache::Add_site['foreman_passenger']
   }
 
