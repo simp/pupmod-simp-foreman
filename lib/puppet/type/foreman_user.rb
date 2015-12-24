@@ -33,6 +33,44 @@ Puppet::Type.newtype(:foreman_user) do
     end
   end
 
+  newparam(:ssl_ca_file) do
+    desc 'The CA file by which the the :host should be validated'
+    defaultto '/etc/foreman/pki/cacerts/cacerts.pem'
+
+    validate do |value|
+      fail Puppet::Error, 'Error: Must be an absolute path.' unless value[0].chr == '/'
+    end
+  end
+
+  newparam(:ssl_client_cert) do
+    desc 'The client PKI certificate that will be recognized by the :host'
+    defaultto "/etc/foreman/pki/public/#{Facter.value(:fqdn)}.pub"
+
+    validate do |value|
+      fail Puppet::Error, 'Error: Must be an absolute path.' unless value[0].chr == '/'
+    end
+  end
+
+  newparam(:ssl_client_key) do
+    desc 'The client PKI private key that will be recognized by the :host'
+    defaultto "/etc/foreman/pki/private/#{Facter.value(:fqdn)}.pem"
+
+    validate do |value|
+      fail Puppet::Error, 'Error: Must be an absolute path.' unless value[0].chr == '/'
+    end
+  end
+
+  newparam(:ssl_version) do
+    desc <<-EOS
+      The SSL version that should be negotiated with the remote host
+
+      You can get a list of valid versions by running the following on the client system:
+        ruby -ropenssl -e 'puts OpenSSL::SSL::SSLContext::METHODS'
+    EOS
+
+    defaultto 'TLSv1_2'
+  end
+
   newparam(:api_admin) do
     desc "Whether or not to make the user an interal API admin."
     newvalues(:true, :false)
@@ -43,6 +81,10 @@ Puppet::Type.newtype(:foreman_user) do
     desc "The password to authenticate the user with."
 
     def insync?(is); provider.password; end
+
+    validate do |value|
+      fail Puppet::Error, "Error: Must enter password to set for the user." if value.empty?
+    end
   end
 
   newproperty(:auth_source) do

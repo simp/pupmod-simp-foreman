@@ -11,7 +11,7 @@
 #
 # == Parameters
 #
-# [*host*]
+# [*ldap_server*]
 # [*port*]
 # [*account*]
 # [*account_password*]
@@ -30,7 +30,7 @@
 # * Kendall Moore <kmoore@keywcorp.com>
 #
 define foreman::auth_source(
-  $server,
+  $ldap_server,
   $port              = '636',
   $account           = hiera('ldap::bind_dn'),
   $account_password  = hiera('ldap::bind_pw'),
@@ -45,7 +45,9 @@ define foreman::auth_source(
   $attr_photo         = '',
   $groups_base_dn    = inline_template('ou=Group,<%= scope.function_hiera(["ldap::base_dn"]) %>')
 ) {
-  include '::foreman'
+  unless defined('$::foreman::admin_user') {
+    fail("Error: You must include '::foreman' prior to using 'foreman::auth_source'")
+  }
 
   $admin_user     = $::foreman::admin_user
   $admin_password = $::foreman::admin_password
@@ -55,7 +57,7 @@ define foreman::auth_source(
     admin_user        => $admin_user,
     admin_password    => $admin_password,
     host              => $host,
-    server            => $server,
+    ldap_server       => $ldap_server,
     port              => $port,
     account           => $account,
     account_password  => $account_password,

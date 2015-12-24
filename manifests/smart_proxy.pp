@@ -43,7 +43,9 @@ define foreman::smart_proxy(
   $admin_password = $::foreman::admin_password,
   $host           = $::foreman::server
 ){
-  include '::foreman'
+  unless defined('$::foreman::admin_user') {
+    fail("Error: You must include '::foreman' prior to using 'foreman::smart_proxy'")
+  }
 
   foreman_smart_proxy { $name:
     admin_user     => $admin_user,

@@ -36,8 +36,7 @@ class foreman::database (
 ) {
   include '::postgresql::client'
   include '::postgresql::server'
-
-  package { 'foreman-postgresql': ensure => 'latest' }
+  include '::foreman::database::install'
 
   file { '/etc/foreman/database.yml':
     ensure  => 'present',
