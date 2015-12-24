@@ -14,14 +14,13 @@ class foreman::settings(
   $websockets_ssl_key    = '',
   $websockets_ssl_cert   = ''
 ){
-  include '::foreman'
+  assert_private()
 
   file { '/etc/foreman/settings.yaml':
     ensure  => 'present',
     owner   => 'root',
     group   => 'foreman',
     mode    => '0640',
-    content => template('foreman/etc/foreman/settings.yml.erb'),
-    notify  => Service['foreman']
+    content => template('foreman/etc/foreman/settings.yml.erb')
   }
 }

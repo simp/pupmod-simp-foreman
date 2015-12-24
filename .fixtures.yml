@@ -34,6 +34,7 @@ fixtures:
     simp:       "git://github.com/simp/pupmod-simp-simp"
     simplib:    "git://github.com/simp/pupmod-simp-simplib"
     simpcat:    "git://github.com/simp/pupmod-simp-concat"
+    sssd:       "git://github.com/simp/pupmod-simp-sssd"
     stdlib:     "git://github.com/simp/puppetlabs-stdlib"
     tcpwrappers: "git://github.com/simp/pupmod-simp-tcpwrappers"
   symlinks:
