@@ -6,28 +6,41 @@ Puppet::Type.type(:foreman_auth_source).provide(:auth_source) do
   require 'json'
   require 'socket'
 
+  commands :psql => 'psql'
+  commands :su => 'su'
+  commands :sh => '/bin/sh'
+  commands :foreman_rake => 'foreman-rake'
+
   def initialize(*args)
     @rest_client = nil
     super(*args)
   end
 
-  # Functios for ensurable
+  # Functions for ensurable
 
   def create
-    update_foreman_auth_sources(nil, 'post')
+    update_foreman_auth_sources('post')
   end
 
   def destroy
-    update_foreman_auth_sources(get_attribute_from_auth_source('id'), 'delete')
+    update_foreman_auth_sources('delete',get_attribute_from_auth_source('id'))
   end
 
   def exists?
+    unless defined?(RestClient)
+      # This is the only way that we could determine to
+      # reliably reload the Gems during the middle of a
+      # Puppet run.
+      Gem.refresh
+      require 'rest_client'
+    end
+
     get_attribute_from_auth_source('name').eql? resource[:name]
   end
 
   # Getters, used for insync?
 
-  def server
+  def ldap_server
     get_attribute_from_auth_source('host')
   end
 
@@ -91,7 +104,7 @@ Puppet::Type.type(:foreman_auth_source).provide(:auth_source) do
   # or else all updates fail. All updates happen in flush, which is called at the end of the run. Since
   # there is a network connection to a REST interface, the goal was to limit this as much as possible.
 
-  def server=(should)            end
+  def ldap_server=(should)       end
   def port=(should)              end
   def account=(should)           end
   def account_password=(should)  end
@@ -109,17 +122,15 @@ Puppet::Type.type(:foreman_auth_source).provide(:auth_source) do
   # Override flush to update/create users.
   def flush
     if exists?
-      update_foreman_auth_sources(get_attribute_from_auth_source('id'), 'put')
+      update_foreman_auth_sources('put',get_attribute_from_auth_source('id'))
     else
-      update_foreman_auth_sources(nil, 'post')
+      update_foreman_auth_sources('post')
     end
   end
 
   private
 
   def get_rest_client(id=nil)
-    require 'rest_client'
-
     if id.nil?
       url = "https://#{resource[:host]}/api/v2/auth_source_ldaps"
     else
@@ -132,13 +143,13 @@ Puppet::Type.type(:foreman_auth_source).provide(:auth_source) do
         :content_type    => :json,
         :accept          => :json,
       },
-      :ssl_ca_file     => '/etc/pki/cacerts/cacerts.pem',
-      :ssl_client_cert => OpenSSL::X509::Certificate.new(File.read("/etc/pki/public/#{Socket.gethostname}.pub")),
-      :ssl_client_key  => OpenSSL::PKey::RSA.new(File.read("/etc/pki/private/#{Socket.gethostname}.pem")),
-      :ssl_version     => :TLSv1_2,
+      :ssl_ca_file     => resource[:ssl_ca_file],
+      :ssl_client_cert => OpenSSL::X509::Certificate.new(File.read(resource[:ssl_client_cert])),
+      :ssl_client_key  => OpenSSL::PKey::RSA.new(File.read(resource[:ssl_client_key])),
+      :ssl_version     => resource[:ssl_version],
       :user            => resource[:admin_user],
       :password        => resource[:admin_password],
-      :verify_ssl      => OpenSSL::SSL::VERIFY_PEER
+      :verify_ssl      => OpenSSL::SSL::VERIFY_PEER,
       }
     )
     rest_client
@@ -169,15 +180,31 @@ Puppet::Type.type(:foreman_auth_source).provide(:auth_source) do
   end
 
   def get_account_password
-    `echo "SELECT account_password FROM auth_sources WHERE name='#{get_attribute_from_auth_source("name")}';" | su - foreman -s /bin/sh -c "psql "`.split("\n")[2].strip
+    account_password = %x(echo "SELECT account_password FROM auth_sources WHERE name='#{get_attribute_from_auth_source("name")}';" | #{command(:su)} - foreman -s #{command(:sh)} -c "#{command(:psql)}").split("\n")[2].strip
+
+    # We need to find a better way to handle this, or have The Foreman team update their code
+    if account_password =~ /encrypted-/
+      %x(#{command(:foreman_rake)} db:auth_sources_ldap:decrypt)
+      account_password = %x(echo "SELECT account_password FROM auth_sources WHERE name='#{get_attribute_from_auth_source("name")}';" | #{command(:su)} - foreman -s #{command(:sh)} -c "#{command(:psql)}").split("\n")[2].strip
+    end
+
+    %x(#{command(:foreman_rake)} db:auth_sources_ldap:encrypt)
+
+    account_password
   end
 
   def get_groups_base
-    `echo "SELECT groups_base FROM auth_sources WHERE name='#{get_attribute_from_auth_source("name")}';" | su - foreman -s /bin/sh -c "psql "`.split("\n")[2].strip
+    %x(echo "SELECT groups_base FROM auth_sources WHERE name='#{get_attribute_from_auth_source("name")}';" | #{command(:su)} - foreman -s #{command(:sh)} -c "#{command(:psql)}").split("\n")[2].strip
   end
 
-  def update_foreman_auth_sources(id=nil,type)
-    rest_client = get_rest_client(id)
+  def update_foreman_auth_sources(type,*id)
+    if id.empty?
+      _id = nil
+    else
+      _id = id.first
+    end
+
+    rest_client = get_rest_client(_id)
     if type.eql? 'post'
       rest_client.post( {'auth_source_ldap' => options}.to_json )
     elsif type.eql? 'put'
@@ -200,7 +227,7 @@ Puppet::Type.type(:foreman_auth_source).provide(:auth_source) do
     opts['attr_photo']        = get_resource(:attr_photo)
     opts['base_dn']           = get_resource(:base_dn)
     opts['groups_base']       = get_resource(:groups_base)
-    opts['host']              = get_resource(:server)
+    opts['host']              = get_resource(:ldap_server)
     opts['ldap_filter']       = get_resource(:ldap_filter)
     opts['name']              = get_resource(:name)
     opts['onthefly_register'] = get_resource(:onthefly_register)

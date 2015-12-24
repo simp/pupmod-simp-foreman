@@ -40,7 +40,9 @@ define foreman::user(
   $firstname      = '',
   $lastname       = ''
 ){
-  include '::foreman'
+  unless defined('$::foreman::admin_user') {
+    fail("Error: You must include '::foreman' prior to using 'foreman::user'")
+  }
 
   $admin_user     = $::foreman::admin_user
   $admin_password = $::foreman::admin_password
