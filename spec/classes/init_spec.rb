@@ -2,12 +2,18 @@ require 'spec_helper'
 
 describe 'foreman' do
   shared_examples_for "a structured module" do
+    let(:precondition) {
+      'include "::foreman"'
+    }
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_class('foreman') }
     it { is_expected.to contain_class('foreman::params') }
   end
 
   shared_examples_for "a foreman installation" do
+    let(:precondition) {
+      'include "::foreman"'
+    }
     it { is_expected.to contain_package('foreman') }
     it { is_expected.to contain_package('foreman-cli') }
     it { is_expected.to contain_package('foreman-postgresql') }
@@ -24,7 +30,7 @@ describe 'foreman' do
     it { is_expected.to contain_class('foreman::proxy::puppet') }
     it { is_expected.to contain_class('foreman::proxy::puppetca') }
     it { is_expected.to contain_class('foreman::settings') }
-    it { is_expected.to contain_class('foreman::ssl') }
+    it { is_expected.to contain_class('foreman::config::ssl') }
 
     it { is_expected.to contain_file('/etc/foreman') }
     it { is_expected.to contain_file('/etc/foreman/database.yml') }
@@ -60,13 +66,14 @@ describe 'foreman' do
   end
 
   shared_examples_for "a foreman/passenger installation" do
-     it { is_expected.to contain_class('foreman::passenger') }
-     it { is_expected.to contain_apache__add_site('05-foreman') }
-     it { is_expected.to contain_apache__add_site('05-foreman-ssl') }
-     it { is_expected.to contain_apache__add_site('foreman_passenger') }
-     it { is_expected.to contain_file('/var/run/passenger') }
-
-
+    let(:precondition) {
+      'include "::foreman"'
+    }
+    it { is_expected.to contain_class('foreman::passenger') }
+    it { is_expected.to contain_apache__add_site('05-foreman') }
+    it { is_expected.to contain_apache__add_site('05-foreman-ssl') }
+    it { is_expected.to contain_apache__add_site('foreman_passenger') }
+    it { is_expected.to contain_file('/var/run/passenger') }
   end
 
   context 'supported operating systems' do
