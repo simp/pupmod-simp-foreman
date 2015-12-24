@@ -30,15 +30,6 @@ RSpec.configure do |c|
       copy_fixture_modules_to( hosts )
       server = only_host_with_role(hosts, 'server')
 
-      # FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME
-      # debug software; remove before merging!
-      puts "FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME\n" * 5
-      puts 'REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE'
-      on hosts, 'yum install -y vim-enhanced mlocate'
-      on hosts, 'updatedb'
-      puts 'REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE  REMOVE'
-      puts "FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME  FIXME\n" * 5
-
       # Generate and install PKI certificates on each SUT
       Dir.mktmpdir do |cert_dir|
         run_fake_pki_ca_on(server, hosts, cert_dir )

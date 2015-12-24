@@ -19,6 +19,8 @@ else
     end
 end
 -%>
+# We don't want to use, or modify, the global CA trust list for the system.
+SetEnv SSL_CERT_DIR <%= @ssl_ca_dir %>
 <IFModule !passenger_module>
   LoadModule passenger_module <%= @passenger_module %>
 </IFModule>

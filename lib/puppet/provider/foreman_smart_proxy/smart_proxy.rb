@@ -6,6 +6,10 @@ Puppet::Type.type(:foreman_smart_proxy).provide(:smart_proxy) do
   require 'json'
   require 'socket'
 
+  def initialize(*args)
+    super(*args)
+  end
+
   def create
     create_smart_proxy
   end
@@ -15,6 +19,14 @@ Puppet::Type.type(:foreman_smart_proxy).provide(:smart_proxy) do
   end
 
   def exists?
+    unless defined?(RestClient)
+      # This is the only way that we could determine to
+      # reliably reload the Gems during the middle of a
+      # Puppet run.
+      Gem.refresh
+      require 'rest_client'
+    end
+
     get_attribute_from_smart_proxy('name') == resource[:name]
   end
 
@@ -35,7 +47,6 @@ Puppet::Type.type(:foreman_smart_proxy).provide(:smart_proxy) do
   private
 
   def get_rest_client(id=nil)
-    require 'rest_client'
     if id.nil?
       rest_url = "https://#{resource[:host]}/api/v2/smart_proxies"
     else
@@ -48,10 +59,10 @@ Puppet::Type.type(:foreman_smart_proxy).provide(:smart_proxy) do
         :content_type    => :json,
         :accept          => :json,
       },
-      :ssl_ca_file     => '/etc/pki/cacerts/cacerts.pem',
-      :ssl_client_cert => OpenSSL::X509::Certificate.new(File.read("/etc/pki/public/#{Socket.gethostname}.pub")),
-      :ssl_client_key  => OpenSSL::PKey::RSA.new(File.read("/etc/pki/private/#{Socket.gethostname}.pem")),
-      :ssl_version     => :TLSv1_2,
+      :ssl_ca_file     => resource[:ssl_ca_file],
+      :ssl_client_cert => OpenSSL::X509::Certificate.new(File.read(resource[:ssl_client_cert])),
+      :ssl_client_key  => OpenSSL::PKey::RSA.new(File.read(resource[:ssl_client_key])),
+      :ssl_version     => resource[:ssl_version],
       :user            => resource[:admin_user],
       :password        => resource[:admin_password],
       :verify_ssl      => OpenSSL::SSL::VERIFY_PEER,

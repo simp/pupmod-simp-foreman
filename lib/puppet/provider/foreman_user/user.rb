@@ -2,7 +2,7 @@ Puppet::Type.type(:foreman_user).provide(:user) do
 
   desc "Provider for adding a user who can login to the Foreman web console."
 
-  commands :foreman_rake => '/sbin/foreman-rake'
+  commands :foreman_rake => '/usr/sbin/foreman-rake'
   defaultfor :kernel => 'Linux'
 
   require 'rubygems'
@@ -18,14 +18,22 @@ Puppet::Type.type(:foreman_user).provide(:user) do
   # Functios for ensurable
 
   def create
-    update_foreman_users(nil, 'post')
+    update_foreman_users('post')
   end
 
   def destroy
-    update_foreman_users(get_attribute_from_user('id'), 'delete')
+    update_foreman_users('delete', get_attribute_from_user('id'))
   end
 
   def exists?
+    unless defined?(RestClient)
+      # This is the only way that we could determine to
+      # reliably reload the Gems during the middle of a
+      # Puppet run.
+      Gem.refresh
+      require 'rest_client'
+    end
+
     begin
       @password_insync = (get_attribute_from_user('login') == resource[:name])
     rescue RestClient::Unauthorized => e
@@ -73,10 +81,12 @@ Puppet::Type.type(:foreman_user).provide(:user) do
 
   # Generic insync to help handle empty strings and nils. Puppet should have nils...
   def is_insync(is, should)
-    if is.nil? or Array(is).first.empty?
-      return Array(should).first.empty?
+    is_empty = Array(is).first.to_s.empty?
+
+    if is_empty
+      return is_empty
     else
-      return Array(is).eql? Array(should)
+      return Array(is).eql?(Array(should))
     end
   end
 
@@ -94,23 +104,23 @@ Puppet::Type.type(:foreman_user).provide(:user) do
   # Override flush to update/create users.
   def flush
     if exists?
-      update_foreman_users(get_attribute_from_user('id'), 'put')
+      update_foreman_users('put', get_attribute_from_user('id'))
     else
-      update_foreman_users(nil, 'post')
+      update_foreman_users('post')
     end
   end
 
   private
 
-  def get_rest_client(api='users',id=nil)
-    require 'rest_client'
-
+  def get_rest_client(api,*id)
     host = resource[:host]
-    if id.nil?
+
+    if id.empty?
       url = "https://#{resource[:host]}/api/v2/#{api}"
     else
-      url = "https://#{resource[:host]}/api/v2/#{api}/#{id}"
+      url = "https://#{resource[:host]}/api/v2/#{api}/#{id.first}"
     end
+
     rc = RestClient::Resource.new(
       url,
       {
@@ -118,10 +128,10 @@ Puppet::Type.type(:foreman_user).provide(:user) do
         :content_type    => :json,
         :accept          => :json,
       },
-      :ssl_ca_file     => '/etc/pki/cacerts/cacerts.pem',
-      :ssl_client_cert => OpenSSL::X509::Certificate.new(File.read("/etc/pki/public/#{Socket.gethostname}.pub")),
-      :ssl_client_key  => OpenSSL::PKey::RSA.new(File.read("/etc/pki/private/#{Socket.gethostname}.pem")),
-      :ssl_version     => :TLSv1_2,
+      :ssl_ca_file     => resource[:ssl_ca_file],
+      :ssl_client_cert => OpenSSL::X509::Certificate.new(File.read(resource[:ssl_client_cert])),
+      :ssl_client_key  => OpenSSL::PKey::RSA.new(File.read(resource[:ssl_client_key])),
+      :ssl_version     => resource[:ssl_version],
       :user            => resource[:admin_user],
       :password        => resource[:admin_password],
       :verify_ssl      => OpenSSL::SSL::VERIFY_PEER,
@@ -131,7 +141,7 @@ Puppet::Type.type(:foreman_user).provide(:user) do
   end
 
   def rest_client
-    @rest_client ||= get_rest_client
+    @rest_client ||= get_rest_client('users')
   end
 
   def try_auth
@@ -167,7 +177,8 @@ Puppet::Type.type(:foreman_user).provide(:user) do
   def update_admin_pass_with_rake
     begin
       $stdout.reopen('/dev/null', 'w')
-      system("cd /usr/share/foreman; /sbin/foreman-rake permissions:reset user='#{resource[:name]}' password='#{resource[:password]}'")
+
+      system("cd /usr/share/foreman; #{command(:foreman_rake)} permissions:reset user='#{resource[:name]}' password='#{resource[:password]}'")
     rescue
       fail Puppet::Error, "Unable to update admin credentials for user: #{resource[:name]}."
     ensure
@@ -175,8 +186,14 @@ Puppet::Type.type(:foreman_user).provide(:user) do
     end
   end
 
-  def update_foreman_users(id=nil,operation)
-    rest_client = get_rest_client('users',id)
+  def update_foreman_users(operation,*id)
+    if id.empty?
+      _id = nil
+    else
+      _id = id.first
+    end
+
+    rest_client = get_rest_client('users',_id)
     if operation.eql? 'post'
       rest_client.post({ 'user' => get_options }.to_json)
     elsif operation.eql? 'put'

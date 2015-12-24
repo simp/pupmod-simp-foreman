@@ -102,29 +102,42 @@ code to something like site::foreman.pp
 class site::foreman {
 
   # Adds an LDAP authentication source to Foreman. This assumes this authentication source
-  # is LDAP and already exists. By default, this define will
+  # is LDAP and already exists.
   foreman::auth_source { 'my_awesome_ldap_server':
-    server => $::fqdn
+    ldap_server => $::fqdn,
+    onthefly_register => true
   }
 
+  # If onthefly_register is not true then you will need to
+  # add uses like this.   If they are in the LDAP server
+  # the password from the LDAP Server will over write the
+  # one entered here but it fails if you do not give a 
+  # password parameter.
   foreman::user { 'amazing.user':
     auth_source => 'my_awesome_ldap_server',
     web_admin   => true,
     firstname   => 'Amazing',
-    lastname    => 'User'
+    lastname    => 'User',
+    password    => 'Mypassword'
   }
 
   foreman::user { 'untrustworth.user':
     auth_source => 'my_awesome_ldap_server',
     web_admin   => false, # This is the default, but want to show the difference from above.
     firstname   => 'Untrustworthy',
-    lastname    => 'User'
+    lastname    => 'User',
+    password    => 'Mypassword'
   }
 }
 ```
+Use onthefly_register if you want foreman to automatically create accounts when users
+log in using an LDAP account.  To give LDAP users a default role, add groups to foreman
+and link them to LDAP groups and foreman roles and put LDAP users in the LDAP group.
+See http://theforeman.org/manuals/1.10/index.html#4.1.1LDAPAuthentication, the
+"Linking user groups to LDAP" section for more info.
 
 And voila! Here is your working Foreman instance complete with LDAP authentication and
-users to login.
+users to login. 
 
 ## Usage
 
