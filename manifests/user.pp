@@ -40,13 +40,15 @@ define foreman::user(
   $firstname      = '',
   $lastname       = ''
 ){
-  include '::foreman'
+  unless defined('$::foreman::admin_user') {
+    fail("Error: You must include '::foreman' prior to using 'foreman::user'")
+  }
 
   $admin_user     = $::foreman::admin_user
   $admin_password = $::foreman::admin_password
   $host           = $::foreman::server
 
-  $l_email = empty($email) ? {
+  $_email = empty($email) ? {
     true    => "${name}@${::domain}",
     default => $email
   }
@@ -59,7 +61,7 @@ define foreman::user(
     api_admin      => $api_admin,
     password       => $password,
     web_admin      => $web_admin,
-    email          => $l_email,
+    email          => $_email,
     firstname      => $firstname,
     lastname       => $lastname
   }

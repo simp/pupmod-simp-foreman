@@ -36,8 +36,7 @@ class foreman::database (
 ) {
   include '::postgresql::client'
   include '::postgresql::server'
-
-  package { 'foreman-postgresql': ensure => 'latest' }
+  include '::foreman::database::install'
 
   file { '/etc/foreman/database.yml':
     ensure  => 'present',
@@ -47,38 +46,38 @@ class foreman::database (
     content => template('foreman/etc/foreman/database.yml.erb')
   }
 
-  $l_production_password = empty($production_password) ? {
+  $_production_password = empty($production_password) ? {
     ''      => false,
     default => postgresql_password($db_user, $production_password),
   }
   postgresql::server::db { $production_database:
     user     => $db_user,
-    password => $l_production_password,
+    password => $_production_password,
     owner    => $db_user,
   }
   ~>
   foreman::rake { 'db:migrate': } ~> foreman::rake { 'db:seed': } ~> foreman::rake { 'apipie:cache': }
 
   if !empty($development_database) {
-    $l_development_password = empty($development_password) ? {
+    $_development_password = empty($development_password) ? {
       ''      => false,
       default => postgresql_password($db_user, $development_password),
     }
     postgresql::server::db { $development_database:
       user     => $db_user,
-      password => $l_development_password,
+      password => $_development_password,
       owner    => $db_user,
     }
   }
 
   if !empty($test_database) {
-    $l_test_password = empty($test_password) ? {
+    $_test_password = empty($test_password) ? {
       ''      => false,
       default => postgresql_password($db_user, $test_password),
     }
     postgresql::server::db { $test_database:
       user     => $db_user,
-      password => $l_test_database,
+      password => $_test_password,
       owner    => $db_user,
     }
   }
