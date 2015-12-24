@@ -93,18 +93,25 @@ class foreman::proxy (
   $trusted_hosts      = hiera_array('foreman::proxy::trusted_hosts', [$::fqdn]),
   $virsh_network      = 'default'
 ){
-  include '::foreman'
+  assert_private()
 
-  package { 'foreman-proxy':
-    ensure => 'latest'
-  }
+  include '::foreman::proxy::install'
+
+  validate_absolute_path($puppet_cert_source)
+  validate_bool($daemonize)
+  validate_port($https_port)
+  validate_absolute_path($log_file)
+  validate_array_member($log_level,['DEBUG','INFO','WARN','ERROR','FATAL'])
+  validate_absolute_path($puppet_dir)
+  validate_absolute_path($settings_directory)
+  validate_net_list($trusted_hosts)
 
   file { $settings_directory:
     ensure  => 'directory',
     owner   => 'root',
     group   => 'foreman-proxy',
     mode    => '0750',
-    require => Package['foreman-proxy'],
+    require => Class['::foreman::proxy::install'],
     notify  => Service['foreman-proxy']
   }
 
@@ -202,25 +209,16 @@ class foreman::proxy (
 
   service { 'foreman-proxy':
     ensure  => 'running',
-    require => Package['foreman-proxy']
+    require => Class['::foreman::proxy::install'],
   }
 
   if $::foreman::use_ssl {
-    $l_url = "https://${proxy_hostname}.${proxy_domain}:${proxy_port}"
+    $_url = "https://${proxy_hostname}.${proxy_domain}:${proxy_port}"
   } else {
-    $l_url = "http://${proxy_hostname}.${proxy_domain}:${proxy_port}"
+    $_url = "http://${proxy_hostname}.${proxy_domain}:${proxy_port}"
   }
 
   foreman::smart_proxy { $proxy_hostname:
-    url    => $l_url,
+    url    => $_url,
   }
-
-  validate_absolute_path($puppet_cert_source)
-  validate_bool($daemonize)
-  validate_port($https_port)
-  validate_absolute_path($log_file)
-  validate_array_member($log_level,['DEBUG','INFO','WARN','ERROR','FATAL'])
-  validate_absolute_path($puppet_dir)
-  validate_absolute_path($settings_directory)
-  validate_net_list($trusted_hosts)
 }

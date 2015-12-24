@@ -48,12 +48,14 @@ define foreman::location (
   $host           = $::foreman::server,
   $ensure         = 'present'
 ){
-  include '::foreman'
+  unless defined('$::foreman::admin_user') {
+    fail("Error: You must include '::foreman' prior to using 'foreman::location'")
+  }
 
   foreman_location { $name:
+    ensure         => $ensure,
     admin_user     => $admin_user,
     admin_password => $admin_password,
-    host           => $host,
-    ensure	   => $ensure
+    host           => $host
   }
 }
