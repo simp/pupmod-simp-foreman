@@ -125,7 +125,7 @@ class foreman::config (
       group  => 'foreman'
     }
 
-    ::pki::copy { "$::puppet_vardir/simp":
+    ::pki::copy { "${::puppet_vardir}/simp":
       group => 'puppet'
     }
   }
