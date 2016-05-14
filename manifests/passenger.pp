@@ -108,18 +108,18 @@ class foreman::passenger (
   validate_absolute_path($passenger_module)
   validate_absolute_path($httpd_base)
   if $rack_auto_detect != '' and ! member($on_off, $rack_auto_detect) {
-    fail("Rack_auto_detect must be one of '$on_off'")
+    fail("Rack_auto_detect must be one of '${on_off}'")
   }
   if $high_performance != '' and ! member($on_off, $high_performance) {
-    fail("High_performance must be one of '$on_off'")
+    fail("High_performance must be one of '${on_off}'")
   }
   if $buffer_response != '' and ! member($on_off, $buffer_response) {
-    fail("Buffer_response must be one of '$on_off'")
+    fail("Buffer_response must be one of '${on_off}'")
   }
   if ! member($on_off, $user_switching) {
-    fail("User_switching must be one of '$on_off'")
+    fail("User_switching must be one of '${on_off}'")
   }
   if ! member($on_off, $friendly_error_pages) {
-    fail("Friendly_error_pages must be one of '$on_off'")
+    fail("Friendly_error_pages must be one of '${on_off}'")
   }
 }

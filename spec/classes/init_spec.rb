@@ -11,9 +11,10 @@ describe 'foreman' do
   end
 
   shared_examples_for "a foreman installation" do
-    let(:precondition) {
+    let(:pre_condition) {
       'include "::foreman"'
     }
+
     it { is_expected.to contain_package('foreman') }
     it { is_expected.to contain_package('foreman-cli') }
     it { is_expected.to contain_package('foreman-postgresql') }
@@ -50,7 +51,7 @@ describe 'foreman' do
     it { is_expected.to contain_file('/etc/foreman/ssl/certs') }
     it { is_expected.to contain_file('/etc/foreman/ssl/certs/ca.pem') }
     it { is_expected.to contain_file('/etc/foreman/ssl/private_keys') }
-    it { is_expected.to contain_file('/reports/foreman.rb') }
+    it { is_expected.to contain_file("#{facts[:puppet_ruby_dir]}/reports/foreman.rb") }
 
     it { is_expected.to contain_foreman__user('admin') }
     it { is_expected.to contain_foreman_user('admin') }
@@ -59,7 +60,7 @@ describe 'foreman' do
     it { is_expected.to contain_foreman__rake('db:seed') }
 
     it { is_expected.to contain_pki__copy('/etc/foreman') }
-    it { is_expected.to contain_pki__copy('/simp') }
+    it { is_expected.to contain_pki__copy("#{facts[:puppet_vardir]}/simp") }
     it { is_expected.to contain_pupmod__conf('foreman-reports') }
     it { is_expected.to contain_postgresql__server__db('foreman') }
     it { is_expected.to contain_pam__access__manage('foreman') }
@@ -80,6 +81,9 @@ describe 'foreman' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
+          facts[:puppet_ruby_dir] = '/var/lib/ruby/gems/puppet'
+          facts[:puppet_vardir] = '/var/lib/puppet'
+
           facts
         end
 
