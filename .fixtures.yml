@@ -3,23 +3,51 @@ fixtures:
   repositories:
     apache:     "https://github.com/simp/pupmod-simp-apache"
     auditd:     "https://github.com/simp/pupmod-simp-auditd"
-    augeasproviders:             "https://github.com/simp/augeasproviders"
-    augeasproviders_base:        "https://github.com/simp/augeasproviders_base"
-    augeasproviders_core:        "https://github.com/simp/augeasproviders_core"
-    augeasproviders_grub:        "https://github.com/simp/augeasproviders_grub"
-    augeasproviders_puppet:      "https://github.com/simp/augeasproviders_puppet"
-    augeasproviders_apache:      "https://github.com/simp/augeasproviders_apache"
-    augeasproviders_mounttab:    "https://github.com/simp/augeasproviders_mounttab"
-    augeasproviders_nagios:      "https://github.com/simp/augeasproviders_nagios"
-    augeasproviders_pam:         "https://github.com/simp/augeasproviders_pam"
-    augeasproviders_postgresql:  "https://github.com/simp/augeasproviders_postgresql"
-    augeasproviders_shellvar:    "https://github.com/simp/augeasproviders_shellvar"
-    augeasproviders_ssh:         "https://github.com/simp/augeasproviders_ssh"
-    augeasproviders_sysctl:      "https://github.com/simp/augeasproviders_sysctl"
-    concat:
-      repo: "https://github.com/puppetlabs/puppetlabs-concat.git"
-      ref:  "1.2.5"
-    inifile:    "https://github.com/simp/puppetlabs-inifile"
+    augeasproviders:             
+      repo: "https://github.com/simp/augeasproviders"
+      branch: 'simp-master'
+    augeasproviders_base:        
+      repo: "https://github.com/simp/augeasproviders_base"
+      branch: 'simp-master'
+    augeasproviders_core:        
+      repo: "https://github.com/simp/augeasproviders_core"
+      branch: 'simp-master'
+    augeasproviders_grub:        
+      repo: "https://github.com/simp/augeasproviders_grub"
+      branch: 'simp-master'
+    augeasproviders_puppet:      
+      repo: "https://github.com/simp/augeasproviders_puppet"
+      branch: 'simp-master'
+    augeasproviders_apache:      
+      repo: "https://github.com/simp/augeasproviders_apache"
+      branch: 'simp-master'
+    augeasproviders_mounttab:    
+      repo: "https://github.com/simp/augeasproviders_mounttab"
+      branch: 'simp-master'
+    augeasproviders_nagios:      
+      repo: "https://github.com/simp/augeasproviders_nagios"
+      branch: 'simp-master'
+    augeasproviders_pam:         
+      repo: "https://github.com/simp/augeasproviders_pam"
+      branch: 'simp-master'
+    augeasproviders_postgresql:  
+      repo: "https://github.com/simp/augeasproviders_postgresql"
+      branch: 'simp-master'
+    augeasproviders_shellvar:    
+      repo: "https://github.com/simp/augeasproviders_shellvar"
+      branch: 'simp-master'
+    augeasproviders_ssh:         
+      repo: "https://github.com/simp/augeasproviders_ssh"
+      branch: 'simp-master'
+    augeasproviders_sysctl:      
+      repo: "https://github.com/simp/augeasproviders_sysctl"
+      branch: 'simp-master'
+    haveged:
+      repo: "https://github.com/simp/puppet-haveged"
+      branch: "simp-master"
+    inifile:    
+      repo: "https://github.com/simp/puppetlabs-inifile"
+      branch: "simp-master"
     iptables:   "https://github.com/simp/pupmod-simp-iptables"
     logrotate:  "https://github.com/simp/pupmod-simp-logrotate"
     pki:        "https://github.com/simp/pupmod-simp-pki"
@@ -36,8 +64,10 @@ fixtures:
     simplib:    "https://github.com/simp/pupmod-simp-simplib"
     simpcat:    "https://github.com/simp/pupmod-simp-concat"
     sssd:       "https://github.com/simp/pupmod-simp-sssd"
-    stdlib:     "https://github.com/simp/puppetlabs-stdlib"
+    stdlib:     
+      repo: "https://github.com/simp/puppetlabs-stdlib"
+      branch: 'simp-master'
     tcpwrappers: "https://github.com/simp/pupmod-simp-tcpwrappers"
-    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
+    compliance_markup: "https://github.com/simp/pupmod-simp-compliance_markup"
   symlinks:
     foreman: "#{source_dir}"
