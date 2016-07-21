@@ -1,0 +1,9 @@
+* Fri Jul 29 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.2.0-0
+- Update to the new naming scheme
+
+* Wed Nov 04 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 0.1.0-1
+- Initial package, minor bug fixes and structural updates in preparation for
+  inclusion in next SIMP release.
+
+* Thu Sep 10 2015 kendall-moore <kendall8688@gmail.com> - 0.1.0-0
+- Initial module (on behalf of Kendall Moore, original author).
