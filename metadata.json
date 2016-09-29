@@ -1,13 +1,17 @@
 {
-  "name":    "simp-foreman",
-  "version": "0.2.0",
-  "author":  "SIMP",
+  "name": "simp-foreman",
+  "version": "0.2.1",
+  "author": "SIMP",
   "summary": "A puppet module to install and configure Foreman.",
   "license": "Apache-2.0",
-  "source":  "https://github.com/kendall-moore/pupmod-simp-foreman",
-  "project_page": "https://github.com/kendall-moore/pupmod-simp-foreman",
-  "issues_url":   "https://github.com/kendall-moore/pupmod-simp-foreman/issues",
-  "tags": [ "simp", "enc", "foreman" ],
+  "source": "https://github.com/simp/pupmod-simp-foreman",
+  "project_page": "https://github.com/simp/pupmod-simp-foreman",
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "enc",
+    "foreman"
+  ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
