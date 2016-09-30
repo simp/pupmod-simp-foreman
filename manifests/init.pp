@@ -110,16 +110,16 @@ class foreman (
   include '::foreman::install'
   include '::foreman::database'
   include '::foreman::settings'
-  include '::apache::conf'
+  include '::simp_apache::conf'
   include '::foreman::passenger'
   include '::foreman::proxy'
   include '::foreman::config'
   if $use_ssl {
     # For variable references
-    include '::apache::ssl'
+    include '::simp_apache::ssl'
     include '::foreman::config::ssl'
 
-    Class['::apache::ssl'] -> Class['::foreman::config::ssl'] -> Class['::foreman::service']
+    Class['::simp_apache::ssl'] -> Class['::foreman::config::ssl'] -> Class['::foreman::service']
   }
   include '::foreman::service'
 

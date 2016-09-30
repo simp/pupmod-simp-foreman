@@ -71,7 +71,7 @@ class foreman::passenger (
 ){
   assert_private()
 
-  include '::apache::ssl'
+  include '::simp_apache::ssl'
   contain '::foreman::passenger::install'
 
   Class['::foreman::passenger::install'] ~> Apache::Add_site['foreman_passenger']
