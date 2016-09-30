@@ -61,16 +61,15 @@ class foreman::ssl (
   $passenger_ruby          = $::foreman::passenger_ruby,
   $server                  = $::foreman::server,
   $sslcacertificatefile    = '/etc/httpd/conf/pki/cacerts/cacerts.pem',
-  $sslcacertificatepath    = $::apache::ssl::sslcacertificatepath,
+  $sslcacertificatepath    = $::simp_apache::ssl::sslcacertificatepath,
   $sslcertificatechainfile = '/etc/httpd/conf/pki/cacerts/cacerts.pem',
-  $sslcertificatefile      = $::apache::ssl::sslcertificatefile,
-  $sslcertificatekeyfile   = $::apache::ssl::sslcertificatekeyfile,
-  $sslverifyclient         = $::apache::ssl::sslverifyclient,
-  $sslverifydepth          = $::apache::ssl::sslverifydepth,
+  $sslcertificatefile      = $::simp_apache::ssl::sslcertificatefile,
+  $sslcertificatekeyfile   = $::simp_apache::ssl::sslcertificatekeyfile,
+  $sslverifyclient         = $::simp_apache::ssl::sslverifyclient,
+  $sslverifydepth          = $::simp_apache::ssl::sslverifydepth,
   $vhost_root              = $::foreman::vhost_root
-){
+) inherits ::simp_apache::ssl {
   include '::foreman'
-  include 'apache::ssl'
 
   apache::add_site { '05-foreman-ssl':
     content => template('foreman/etc/httpd/conf.d/05-foreman-ssl.conf.erb')
