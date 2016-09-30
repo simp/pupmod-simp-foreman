@@ -1,1 +1,2 @@
 Requires: pupmod-simp-iptables >= 2.0.0-0
+Requires: pupmod-simp-simp_apache >= 5.0.0-0

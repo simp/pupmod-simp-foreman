@@ -1,5 +1,5 @@
-* Fri Sep 28 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 0.2.1-0
-- Update project origin to `github.com/simp`
+* Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-0
+- Update to use the renamed 'simp_apache'
 
 * Fri Jul 29 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.2.0-0
 - Update to the new naming scheme
