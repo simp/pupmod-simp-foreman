@@ -1,8 +1,8 @@
 ---
 fixtures:
   repositories:
-    apache:     "https://github.com/simp/pupmod-simp-apache"
-    auditd:     "https://github.com/simp/pupmod-simp-auditd"
+    simp_apache: "https://github.com/simp/pupmod-simp-apache"
+    auditd: "https://github.com/simp/pupmod-simp-auditd"
     augeasproviders:
       repo: "https://github.com/simp/augeasproviders"
       branch: 'simp-master'

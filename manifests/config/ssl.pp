@@ -61,18 +61,18 @@ class foreman::config::ssl (
   $passenger_ruby          = $::foreman::config::passenger_ruby,
   $server                  = $::foreman::config::server,
   $sslcacertificatefile    = '/etc/httpd/conf/pki/cacerts/cacerts.pem',
-  $sslcacertificatepath    = $::apache::ssl::sslcacertificatepath,
+  $sslcacertificatepath    = $::simp_apache::ssl::sslcacertificatepath,
   $sslcertificatechainfile = '/etc/httpd/conf/pki/cacerts/cacerts.pem',
-  $sslcertificatefile      = $::apache::ssl::sslcertificatefile,
-  $sslcertificatekeyfile   = $::apache::ssl::sslcertificatekeyfile,
-  $sslverifyclient         = $::apache::ssl::sslverifyclient,
-  $sslverifydepth          = $::apache::ssl::sslverifydepth,
+  $sslcertificatefile      = $::simp_apache::ssl::sslcertificatefile,
+  $sslcertificatekeyfile   = $::simp_apache::ssl::sslcertificatekeyfile,
+  $sslverifyclient         = $::simp_apache::ssl::sslverifyclient,
+  $sslverifydepth          = $::simp_apache::ssl::sslverifydepth,
   $vhost_root              = $::foreman::config::vhost_root
-) {
+) inherits ::simp_apache::ssl {
   assert_private()
 
-  unless defined('::apache::ssl') {
-    fail("Error: You must include '::apache::ssl' prior to 'foreman::config::ssl'")
+  unless defined('::simp_apache::ssl') {
+    fail("Error: You must include '::simp_apache::ssl' prior to 'foreman::config::ssl'")
   }
 
   validate_absolute_path($access_log)
