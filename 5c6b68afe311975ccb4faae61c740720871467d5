@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_733ae3ce",
+        "filename": "metadata.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-10-05T20:30:21Z",
+      "side": 0,
+      "message": "Did you mean to comment on the base patch?",
+      "parentUuid": "baa041b7_c15afc81",
+      "revId": "5c6b68afe311975ccb4faae61c740720871467d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_a1549853",
         "filename": "metadata.json",
         "patchSetId": 1
