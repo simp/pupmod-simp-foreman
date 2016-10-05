@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_41702c08",
+        "filename": "build/rpm_metadata/requires",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-10-05T19:45:06Z",
+      "side": 1,
+      "message": "Needs apache",
+      "revId": "04105568dd272fdeefce7b0f2b722f3d4bf2eded",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_e1550052",
+        "filename": "build/rpm_metadata/requires",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-10-05T19:45:06Z",
+      "side": 1,
+      "message": "No",
+      "revId": "04105568dd272fdeefce7b0f2b722f3d4bf2eded",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_01658443",
+        "filename": "build/rpm_metadata/requires",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-10-05T19:45:06Z",
+      "side": 1,
+      "message": "No",
+      "revId": "04105568dd272fdeefce7b0f2b722f3d4bf2eded",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_21608834",
+        "filename": "build/rpm_metadata/requires",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-10-05T19:45:06Z",
+      "side": 1,
+      "message": "no",
+      "revId": "04105568dd272fdeefce7b0f2b722f3d4bf2eded",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
