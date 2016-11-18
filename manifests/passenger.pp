@@ -74,17 +74,17 @@ class foreman::passenger (
   include '::simp_apache::ssl'
   contain '::foreman::passenger::install'
 
-  Class['::foreman::passenger::install'] ~> Apache::Add_site['foreman_passenger']
+  Class['::foreman::passenger::install'] ~> Simp_apache::Add_site['foreman_passenger']
 
   file { $temp_dir :
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-    before => Apache::Add_site['foreman_passenger']
+    before => Simp_apache::Add_site['foreman_passenger']
   }
 
-  apache::add_site { 'foreman_passenger':
+  simp_apache::add_site { 'foreman_passenger':
     content => template('foreman/etc/httpd/conf.d/foreman_passenger.erb'),
     notify  => Service['httpd']
   }

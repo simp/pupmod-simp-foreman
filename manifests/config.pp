@@ -205,7 +205,7 @@ class foreman::config (
     content => template('foreman/etc/puppet/foreman.yaml.erb')
   }
 
-  apache::add_site { '05-foreman':
+  simp_apache::add_site { '05-foreman':
     content => template('foreman/etc/httpd/conf.d/05-foreman.conf.erb')
   }
 

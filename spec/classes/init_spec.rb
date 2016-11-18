@@ -71,9 +71,9 @@ describe 'foreman' do
       'include "::foreman"'
     }
     it { is_expected.to contain_class('foreman::passenger') }
-    it { is_expected.to contain_apache__add_site('05-foreman') }
-    it { is_expected.to contain_apache__add_site('05-foreman-ssl') }
-    it { is_expected.to contain_apache__add_site('foreman_passenger') }
+    it { is_expected.to contain_simp_apache__add_site('05-foreman') }
+    it { is_expected.to contain_simp_apache__add_site('05-foreman-ssl') }
+    it { is_expected.to contain_simp_apache__add_site('foreman_passenger') }
     it { is_expected.to contain_file('/var/run/passenger') }
   end
 

@@ -71,7 +71,7 @@ class foreman::ssl (
 ) inherits ::simp_apache::ssl {
   include '::foreman'
 
-  apache::add_site { '05-foreman-ssl':
+  simp_apache::add_site { '05-foreman-ssl':
     content => template('foreman/etc/httpd/conf.d/05-foreman-ssl.conf.erb')
   }
 

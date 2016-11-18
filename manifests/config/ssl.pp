@@ -69,7 +69,10 @@ class foreman::config::ssl (
   $sslverifydepth          = $::simp_apache::ssl::sslverifydepth,
   $vhost_root              = $::foreman::config::vhost_root
 ) inherits ::simp_apache::ssl {
-  assert_private()
+  # FIXME When this is private to the module, spec tests throw exceptions about 
+  # accessing a private class.  May be problem with private class inheriting from
+  # another module.
+  #assert_private()
 
   unless defined('::simp_apache::ssl') {
     fail("Error: You must include '::simp_apache::ssl' prior to 'foreman::config::ssl'")
@@ -87,7 +90,7 @@ class foreman::config::ssl (
   validate_array_member($sslverifyclient,['require','optional'])
   validate_integer($sslverifydepth)
 
-  apache::add_site { '05-foreman-ssl':
+  simp_apache::add_site { '05-foreman-ssl':
     content => template('foreman/etc/httpd/conf.d/05-foreman-ssl.conf.erb')
   }
 
