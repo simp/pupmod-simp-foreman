@@ -1,7 +1,7 @@
 {
   "name": "simp-foreman",
   "version": "1.0.0",
-  "author": "SIMP",
+  "author": "SIMP Team",
   "summary": "A puppet module to install and configure Foreman.",
   "license": "Apache-2.0",
   "source": "https://github.com/simp/pupmod-simp-foreman",
