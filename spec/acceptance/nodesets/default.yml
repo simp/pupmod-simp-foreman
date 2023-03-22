@@ -1,44 +1,49 @@
+---
 HOSTS:
   server:
     roles:
-      - server
-      - default
-      - master
-    platform:   el-7-x86_64
-    box:        puppetlabs/centos-7.0-64-nocm
-    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
-    hypervisor: vagrant
+    - server
+    - default
+    - master
+    platform: el-7-x86_64
+    box: puppetlabs/centos-7.0-64-nocm
+    box_url: https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     vagrant_memsize: 2048
     repos:
       simp:
         url: https://dl.bintray.com/simp/5.1.X
         gpgkeys:
-          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
-          - https://getfedora.org/static/352C64E5.txt
+        - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+        - https://getfedora.org/static/352C64E5.txt
       foreman:
         url: http://yum.theforeman.org/releases/latest/el7/x86_64
         gpgkeys:
-          - http://yum.theforeman.org/releases/latest/RPM-GPG-KEY-foreman
+        - http://yum.theforeman.org/releases/latest/RPM-GPG-KEY-foreman
+    family: centos-cloud/centos-7
+    gce_machine_type: n1-standard-2
   client:
     roles:
-      - client
-      - agent
-    platform:   el-7-x86_64
-    box:        puppetlabs/centos-7.0-64-nocm
-    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
-    hypervisor: vagrant
+    - client
+    - agent
+    platform: el-7-x86_64
+    box: puppetlabs/centos-7.0-64-nocm
+    box_url: https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     repos:
       simp:
         url: https://dl.bintray.com/simp/5.1.X
         gpgkeys:
-          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
-          - https://getfedora.org/static/352C64E5.txt
+        - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+        - https://getfedora.org/static/352C64E5.txt
       foreman:
         url: http://yum.theforeman.org/releases/latest/el7/x86_64
         gpgkeys:
-          - http://yum.theforeman.org/releases/latest/RPM-GPG-KEY-foreman
+        - http://yum.theforeman.org/releases/latest/RPM-GPG-KEY-foreman
+    family: centos-cloud/centos-7
+    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
-  type:      foss
+  type: foss
   vagrant_memsize: 256
-  # vb_gui: true
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
